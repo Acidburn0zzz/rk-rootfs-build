@@ -20,6 +20,14 @@ sudo mkdir -p $TARGET_ROOTFS_DIR/packages
 sudo cp -rf packages/$ARCH/* $TARGET_ROOTFS_DIR/packages
 sudo cp -rf overlay/* $TARGET_ROOTFS_DIR/
 
+sudo cp -rf overlay-firmware/* $TARGET_ROOTFS_DIR/
+if [ "$VERSION" == "debug" ] || ["$VERSION" == "demo" ] ; then
+	sudo cp -rf overlay-debug/* $TARGET_ROOTFS_DIR/
+fi
+if [ "$VERSION" == "demo" ] ; then
+	sudo cp -rf overlay-demo/* $TARGET_ROOTFS_DIR/
+fi
+
 echo "Change root....................."
 sudo cp /usr/bin/qemu-arm-static $TARGET_ROOTFS_DIR/usr/bin/
 sudo mount -o bind /dev $TARGET_ROOTFS_DIR/dev
@@ -71,14 +79,5 @@ rm -rf /var/lib/apt/lists/*
 rm -rf /libs
 
 EOF
-
-sudo cp -rf overlay-firmware/* $TARGET_ROOTFS_DIR/
-if [ "$VERSION" == "debug"] || ["$VERSION" == "demo" ] ; then
-	sudo cp -rf overlay-debug/* $TARGET_ROOTFS_DIR/
-fi
-if ["$VERSION" == "demo" ] ; then
-	sudo cp -rf overlay-demo/* $TARGET_ROOTFS_DIR/
-fi
-
 
 sudo umount $TARGET_ROOTFS_DIR/dev
